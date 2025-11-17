@@ -75,7 +75,8 @@ Watch how changing parameters affects the signal.
 
 # Add path to import our modules
 import sys
-sys.path.append('../../src')
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
 
 from signals.generator import generate_sine, generate_square
 import matplotlib.pyplot as plt

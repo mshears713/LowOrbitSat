@@ -40,7 +40,8 @@ they get weaker and corrupted.
 
 # Add path to import our modules
 import sys
-sys.path.append('../../src')
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
 
 from signals.generator import generate_sine
 from channel.range_loss import apply_free_space_loss, distance_to_attenuation_db, apply_atmospheric_loss

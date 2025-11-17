@@ -43,7 +43,8 @@ later analysis and learning.
 
 # Add path to import our modules
 import sys
-sys.path.append('../../src')
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
 
 from comms.storage import init_database, save_mission, query_missions, get_mission_statistics, clear_database, get_default_db_path
 import numpy as np

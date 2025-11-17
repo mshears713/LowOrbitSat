@@ -58,7 +58,8 @@ Signal Strength
 
 # Add path to import our modules
 import sys
-sys.path.append('../../src')
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
 
 from utils.timing import SatellitePass, elevation_angle_curve, signal_strength_curve, distance_curve, generate_pass_timeline
 import numpy as np

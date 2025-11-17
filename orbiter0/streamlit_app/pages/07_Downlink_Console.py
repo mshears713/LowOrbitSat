@@ -44,7 +44,8 @@ communication session.
 
 # Add path to import our modules
 import sys
-sys.path.append('../../src')
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
 
 from signals.modulation import text_to_bits, bits_to_text, bits_to_bpsk_symbols, bpsk_symbols_to_bits, modulate_bpsk, demodulate_bpsk
 from channel.noise import add_awgn, calculate_snr_db

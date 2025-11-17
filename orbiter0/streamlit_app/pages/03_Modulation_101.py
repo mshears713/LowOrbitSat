@@ -68,7 +68,8 @@ Watch as your text is converted to bits, modulated, transmitted through a noisy 
 
 # Add path to import our modules
 import sys
-sys.path.append('../../src')
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
 
 from signals.modulation import (
     text_to_bits, bits_to_text, bits_to_bpsk_symbols,

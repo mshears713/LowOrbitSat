@@ -60,7 +60,8 @@ Think of it like mailing a letter:
 
 # Add path to import our modules
 import sys
-sys.path.append('../../src')
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
 
 from comms.packetizer import create_packet, parse_packet, validate_packet, calculate_overhead
 from comms.corruptor import flip_random_bits, burst_errors, corrupt_specific_byte

@@ -57,7 +57,8 @@ Even with missing letters, you can figure it out!
 
 # Add path to import our modules
 import sys
-sys.path.append('../../src')
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
 
 from comms.decoder import add_parity_bit, check_parity_bit, hamming_encode_4bit, hamming_decode_4bit
 import numpy as np
