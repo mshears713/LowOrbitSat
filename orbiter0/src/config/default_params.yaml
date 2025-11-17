@@ -1,0 +1,240 @@
+# ═══════════════════════════════════════════════════════════════
+# ORBITER-0 DEFAULT PARAMETERS
+# Teaching-oriented configuration with explanatory comments
+# ═══════════════════════════════════════════════════════════════
+#
+# 🎓 LEARNING NOTE:
+# This file contains all the default parameters for the simulation.
+# Each parameter is carefully chosen for beginner-friendly demos.
+# Real satellite systems use MUCH larger values!
+#
+# ═══════════════════════════════════════════════════════════════
+
+# ───────────────────────────────────────────────────────────────
+# SIGNAL GENERATION PARAMETERS
+# ───────────────────────────────────────────────────────────────
+signal:
+  # Sample rate (Hz) - how many measurements per second
+  # 🎓 NOTE: Must be ≥ 2× highest frequency (Nyquist theorem)
+  # We use audio-rate sampling for easy visualization
+  sample_rate_hz: 44100  # Same as CD quality audio!
+
+  # Carrier frequency (Hz) - the main oscillation
+  # 🎓 NOTE: Real satellites use GHz range, we use Hz for simplicity
+  # This keeps numbers manageable for teaching
+  carrier_freq_hz: 1000  # 1 kHz carrier
+
+  # Symbol rate (symbols per second)
+  # 🎓 NOTE: For BPSK, this equals bit rate
+  # Lower rate = easier to visualize individual symbols
+  symbol_rate_hz: 100  # 100 bits/second
+
+  # Samples per symbol - how many samples represent one bit
+  # 🎓 NOTE: Calculated as sample_rate / symbol_rate
+  # More samples = smoother waveforms, easier demodulation
+  samples_per_symbol: 441  # 44100 / 100
+
+  # Default amplitude for generated signals
+  # 🎓 NOTE: Normalized to 1.0 for simplicity
+  default_amplitude: 1.0
+
+
+# ───────────────────────────────────────────────────────────────
+# CHANNEL EFFECTS PARAMETERS
+# ───────────────────────────────────────────────────────────────
+channel:
+  # Default Signal-to-Noise Ratio in decibels
+  # 🎓 GUIDE:
+  #   30 dB = Excellent (1000:1 power ratio)
+  #   20 dB = Good (100:1)
+  #   10 dB = Marginal (10:1)
+  #   5 dB = Poor (3:1)
+  #   0 dB = Unusable (equal power)
+  default_snr_db: 15.0  # Moderate quality with visible noise
+
+  # Range loss parameters
+  # Reference distance for path loss calculation (km)
+  # 🎓 NOTE: Low Earth Orbit satellites are ~400-2000 km altitude
+  reference_distance_km: 1000  # Typical LEO scenario
+
+  # Free space path loss exponent
+  # 🎓 NOTE: Theoretical free space = 2.0 (inverse square law)
+  # We use simplified model for teaching
+  path_loss_exponent: 2.0
+
+  # Atmospheric absorption loss (dB)
+  # 🎓 NOTE: Frequency-dependent in reality
+  # Using fixed value for simplicity
+  atmospheric_loss_db: 2.0  # Small additional loss
+
+  # Fade event parameters (Phase 3)
+  # Average duration of a fade event (seconds)
+  fade_duration_sec: 0.5
+
+  # Severity of fade (dB reduction during fade)
+  fade_severity_db: 10.0  # Significant but not total dropout
+
+
+# ───────────────────────────────────────────────────────────────
+# PACKET STRUCTURE PARAMETERS
+# ───────────────────────────────────────────────────────────────
+packets:
+  # Preamble (sync pattern) - for packet detection
+  # 🎓 NOTE: 0xAA = 10101010 in binary (alternating pattern)
+  # Easy to detect and synchronize to
+  preamble: [0xAA, 0xAA, 0xAA, 0xAA]  # 4 bytes
+
+  # Maximum payload size (bytes)
+  # 🎓 NOTE: Small packets = more overhead, but easier to visualize
+  # Real satellites use 100s-1000s of bytes per packet
+  max_payload_bytes: 256
+
+  # Minimum payload size (bytes)
+  min_payload_bytes: 1
+
+  # Header size (bytes)
+  # 🎓 BREAKDOWN:
+  #   Packet ID: 2 bytes (0-65535)
+  #   Length: 2 bytes
+  #   Timestamp: 4 bytes
+  header_size_bytes: 8
+
+  # CRC size (bytes)
+  # 🎓 NOTE: CRC-16 uses 2 bytes
+  crc_size_bytes: 2
+
+  # Total overhead per packet (preamble + header + CRC)
+  total_overhead_bytes: 14  # 4 + 8 + 2
+
+
+# ───────────────────────────────────────────────────────────────
+# ERROR CORRECTION PARAMETERS (Phase 3)
+# ───────────────────────────────────────────────────────────────
+fec:
+  # Enable Forward Error Correction
+  enabled: false  # Disabled by default, enable in demos
+
+  # FEC scheme to use
+  # 🎓 OPTIONS:
+  #   'parity' = Simple parity bit (detection only)
+  #   'hamming' = Hamming(7,4) code (1-bit correction)
+  scheme: 'hamming'
+
+  # Overhead percentage (approximate)
+  # 🎓 NOTE: Hamming(7,4) has ~75% efficiency (43% overhead)
+  overhead_percent: 43
+
+
+# ───────────────────────────────────────────────────────────────
+# SATELLITE PASS PARAMETERS (Phase 3)
+# ───────────────────────────────────────────────────────────────
+satellite_pass:
+  # Typical pass duration (seconds)
+  # 🎓 NOTE: LEO satellites are visible ~5-15 minutes per pass
+  # We use shorter duration for quicker demos
+  duration_sec: 300  # 5 minutes
+
+  # Time from horizon to horizon
+  # Signal is weak near horizon, strong at peak
+  # 🎓 MODEL: Signal follows a sine-like curve
+
+  # Maximum elevation angle (degrees)
+  # 🎓 NOTE: 90° = directly overhead (best case)
+  #          0° = at horizon (worst case)
+  max_elevation_deg: 60  # Good pass, but not directly overhead
+
+  # Signal strength multiplier at peak
+  peak_strength_multiplier: 1.0  # Full strength
+
+  # Signal strength multiplier at horizon
+  horizon_strength_multiplier: 0.1  # Very weak
+
+
+# ───────────────────────────────────────────────────────────────
+# VISUALIZATION PARAMETERS (Phase 2-4)
+# ───────────────────────────────────────────────────────────────
+visualization:
+  # Default plot width (inches)
+  plot_width: 10
+
+  # Default plot height (inches)
+  plot_height: 4
+
+  # DPI for saved figures
+  plot_dpi: 100
+
+  # Color scheme for teaching
+  # 🎓 NOTE: High contrast for clarity
+  signal_color: '#2E86AB'  # Blue
+  noise_color: '#A23B72'   # Purple
+  clean_color: '#06A77D'   # Green
+  error_color: '#D62246'   # Red
+
+  # Font sizes
+  title_fontsize: 14
+  label_fontsize: 12
+  tick_fontsize: 10
+
+
+# ───────────────────────────────────────────────────────────────
+# DATABASE PARAMETERS (Phase 3)
+# ───────────────────────────────────────────────────────────────
+database:
+  # SQLite database file path (relative to data/)
+  filename: 'missions.sqlite'
+
+  # Auto-save every transmission
+  auto_save: true
+
+  # Maximum missions to keep in database
+  # 🎓 NOTE: 0 = unlimited
+  # Prevent database from growing indefinitely
+  max_missions: 1000  # Keep last 1000 missions
+
+
+# ───────────────────────────────────────────────────────────────
+# SIMULATION PARAMETERS (Phase 5)
+# ───────────────────────────────────────────────────────────────
+simulation:
+  # Real-time mode speed multiplier
+  # 🎓 NOTE: 1.0 = real-time, 10.0 = 10× faster
+  time_multiplier: 1.0
+
+  # Random seed for reproducible results
+  # 🎓 NOTE: Set to specific value for reproducibility
+  #          Set to null for true randomness
+  random_seed: 42  # Answer to everything!
+
+  # Enable async mode for live demos
+  async_enabled: false  # Coming in Phase 5
+
+
+# ───────────────────────────────────────────────────────────────
+# TEACHING MODE PARAMETERS
+# ───────────────────────────────────────────────────────────────
+teaching:
+  # Show detailed explanations in Streamlit
+  verbose_mode: true
+
+  # Show code snippets in UI
+  show_code: true
+
+  # Enable step-by-step mode
+  step_by_step: false  # Manual advance through pipeline
+
+  # Show intermediate calculations
+  show_math: true
+
+
+# ═══════════════════════════════════════════════════════════════
+# END OF CONFIGURATION
+# ═══════════════════════════════════════════════════════════════
+#
+# 🎓 USAGE NOTES:
+# - These values are optimized for learning, not performance
+# - Real systems use much higher frequencies and bandwidths
+# - Experiment by changing values to see effects!
+# - Invalid combinations will be caught by validation (Phase 2+)
+#
+# 🚀 HAVE FUN LEARNING!
+# ═══════════════════════════════════════════════════════════════
