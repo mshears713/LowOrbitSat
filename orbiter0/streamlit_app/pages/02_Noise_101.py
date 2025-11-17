@@ -180,7 +180,7 @@ st.markdown(f"""
 
 """)
 
-st.success("✅ **Phase 2 Complete:** Interactive noise simulator is now operational!")
+st.success("✅ **Interactive Demo Active:** Adjust SNR to see signal degradation in real-time!")
 
 st.divider()
-st.caption("Chapter 2: Noise 101 | Phase 2 Complete - Interactive Demo Active")
+st.caption("Chapter 2: Noise 101 | Phase 4: Fully Interactive Learning Console")

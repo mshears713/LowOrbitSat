@@ -188,13 +188,14 @@ Understanding signals is the **foundation** of everything in wireless communicat
 
 ---
 
-### 🎓 Try This Next
+### 🎓 Experiment Ideas
 
-Once Phase 2 is implemented, experiment with:
-1. Generate a 10 Hz sine wave - count the cycles
+Try these experiments to deepen your understanding:
+1. Generate a 10 Hz sine wave - count the cycles visually
 2. Increase frequency to 50 Hz - notice how it oscillates faster
 3. Switch to square wave - see the digital-like transitions
-4. Lower the sample rate - see what happens (spoiler: aliasing!)
+4. Set frequency to 1 Hz and duration to 3 seconds - watch slow oscillation
+5. Compare amplitude 0.5 vs 2.0 - understand signal strength
 
 ---
 
@@ -207,8 +208,8 @@ get corrupted during transmission.
 
 """)
 
-st.success("✅ **Phase 2 Complete:** Interactive signal generator is now operational!")
+st.success("✅ **Interactive Demo Active:** Experiment with the controls above!")
 
 # Footer
 st.divider()
-st.caption("Chapter 1: Signals 101 | Phase 2 Complete - Interactive Demo Active")
+st.caption("Chapter 1: Signals 101 | Phase 4: Fully Interactive Learning Console")
