@@ -344,7 +344,7 @@ signal:
 - [ ] All major modules have ASCII diagrams
 - [ ] No implementation code yet (all stubs)
 - [ ] README.md has NOT been modified
-- [ ] Can run `python -c "import orbiter0.src.signal.generator"` without errors
+- [ ] Can run `python -c "import orbiter0.src.signals.generator"` without errors
 
 ---
 
@@ -1044,7 +1044,7 @@ Demodulation (with noise):
 ```python
 # tests/test_signal_generator.py
 import numpy as np
-from src.signal.generator import generate_sine
+from src.signals.generator import generate_sine
 
 def test_sine_amplitude():
     """Verify sine wave reaches expected amplitude."""
@@ -1305,7 +1305,7 @@ python -c "from orbiter0.src.comms.storage import init_database; init_database()
 
 # Interactive Python with imports
 python
->>> from orbiter0.src.signal.generator import generate_sine
+>>> from orbiter0.src.signals.generator import generate_sine
 >>> t, s = generate_sine(10, 1.0, 1.0, 1000)
 >>> import matplotlib.pyplot as plt
 >>> plt.plot(t, s); plt.show()

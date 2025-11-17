@@ -70,7 +70,7 @@ Watch as your text is converted to bits, modulated, transmitted through a noisy 
 import sys
 sys.path.append('../../src')
 
-from signal.modulation import (
+from signals.modulation import (
     text_to_bits, bits_to_text, bits_to_bpsk_symbols,
     bpsk_symbols_to_bits, modulate_bpsk, demodulate_bpsk
 )

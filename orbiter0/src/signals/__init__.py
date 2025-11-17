@@ -1,6 +1,6 @@
 """
 ═══════════════════════════════════════════════════════════════════
-SIGNAL MODULE
+SIGNALS MODULE
 ═══════════════════════════════════════════════════════════════════
 
 Handles all signal generation and modulation tasks.

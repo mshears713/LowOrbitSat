@@ -55,7 +55,7 @@ import numpy as np
 import sys
 sys.path.append('..')  # To import from sibling directories
 
-from signal.modulation import (
+from signals.modulation import (
     text_to_bits, bits_to_bpsk_symbols, modulate_bpsk,
     demodulate_bpsk, bpsk_symbols_to_bits, bits_to_text
 )
