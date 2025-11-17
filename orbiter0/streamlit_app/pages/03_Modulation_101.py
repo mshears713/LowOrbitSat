@@ -254,7 +254,7 @@ st.markdown("""
 ---
 """)
 
-st.success("✅ **Phase 2 Complete:** Interactive BPSK modulation demo is now operational!")
+st.success("✅ **Interactive Demo Active:** Type a message and watch it travel through the communication system!")
 
 st.divider()
-st.caption("Chapter 3: Modulation 101 | Phase 2 Complete - Interactive Demo Active")
+st.caption("Chapter 3: Modulation 101 | Phase 4: Fully Interactive Learning Console")
