@@ -53,6 +53,8 @@ SIMPLIFICATIONS:
 # │                                                        │
 # └────────────────────────────────────────────────────────┘
 
+import numpy as np
+
 
 def add_awgn(signal, snr_db):
     """
@@ -88,8 +90,37 @@ def add_awgn(signal, snr_db):
     noise : ndarray
         The noise that was added (useful for visualization)
     """
-    # Implementation coming in Phase 2
-    pass
+    # Step 1: Calculate signal power
+    # 🎓 Power is the mean of the squared signal values
+    # This measures total energy in the signal
+    signal_power = np.mean(signal ** 2)
+
+    # Step 2: Convert SNR from dB to linear scale
+    # 🎓 SNR_linear = 10^(SNR_dB / 10)
+    snr_linear = db_to_linear(snr_db)
+
+    # Step 3: Calculate required noise power
+    # 🎓 From definition: SNR = P_signal / P_noise
+    # Therefore: P_noise = P_signal / SNR
+    noise_power = signal_power / snr_linear
+
+    # Step 4: Calculate noise standard deviation
+    # 🎓 For Gaussian: power = variance = std_dev²
+    # Therefore: std_dev = sqrt(power)
+    noise_std = np.sqrt(noise_power)
+
+    # Step 5: Generate Gaussian noise
+    # 🎓 np.random.normal(mean, std_dev, size)
+    # Mean = 0 (noise centered around zero)
+    # Std = calculated noise_std
+    # Size = same as signal length
+    noise = np.random.normal(0, noise_std, len(signal))
+
+    # Step 6: Add noise to signal
+    # 🎓 This is the "Additive" part of AWGN!
+    noisy_signal = signal + noise
+
+    return noisy_signal, noise
 
 
 def calculate_snr_db(signal, noise):
@@ -121,8 +152,25 @@ def calculate_snr_db(signal, noise):
     snr_db : float
         SNR in decibels
     """
-    # Implementation coming in Phase 2
-    pass
+    # Step 1: Calculate signal power
+    # 🎓 Power = mean of squared values
+    signal_power = np.mean(signal ** 2)
+
+    # Step 2: Calculate noise power
+    noise_power = np.mean(noise ** 2)
+
+    # Step 3: Calculate SNR as power ratio
+    # 🎓 Avoid division by zero!
+    if noise_power == 0:
+        return float('inf')  # Perfect signal, no noise
+
+    snr_linear = signal_power / noise_power
+
+    # Step 4: Convert to decibels
+    # 🎓 dB = 10 * log10(linear_ratio)
+    snr_db = 10 * np.log10(snr_linear)
+
+    return snr_db
 
 
 def db_to_linear(db_value):
@@ -151,8 +199,11 @@ def db_to_linear(db_value):
     linear_value : float
         Linear scale value
     """
-    # Implementation coming in Phase 2
-    pass
+    # 🎓 Formula: 10^(dB/10)
+    # This is the inverse of the dB formula
+    linear_value = 10 ** (db_value / 10)
+
+    return linear_value
 
 
 def linear_to_db(linear_value):
@@ -174,8 +225,14 @@ def linear_to_db(linear_value):
     db_value : float
         Value in decibels
     """
-    # Implementation coming in Phase 2
-    pass
+    # 🎓 Formula: 10 * log10(linear)
+    # Handle edge case: log of zero is undefined
+    if linear_value <= 0:
+        return float('-inf')  # Negative infinity dB
+
+    db_value = 10 * np.log10(linear_value)
+
+    return db_value
 
 
 # ═══ DEBUGGING NOTES ═══
