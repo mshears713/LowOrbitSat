@@ -202,10 +202,80 @@ def apply_attenuation_db(signal, attenuation_db):
 #   - This is free space only - no atmospheric effects
 
 
+def apply_atmospheric_loss(signal, elevation_angle_deg=30, weather='clear'):
+    """
+    Apply simplified atmospheric absorption loss.
+
+    🎓 TEACHING NOTE:
+    Earth's atmosphere absorbs radio signals!
+    How much depends on:
+    - Elevation angle (lower = more atmosphere to pass through)
+    - Weather (rain/clouds absorb more)
+    - Frequency (higher frequencies absorbed more)
+
+    SIMPLIFIED MODEL:
+    We use a simple scalar loss based on angle and weather.
+    Real models are MUCH more complex (ITU-R P.676, etc.)
+
+    Typical Values:
+    - Clear sky, high angle: ~0.5 dB loss
+    - Clear sky, low angle: ~2 dB loss
+    - Rain, low angle: ~5 dB loss
+
+    Parameters
+    ----------
+    signal : ndarray
+        Input signal
+    elevation_angle_deg : float
+        Angle above horizon in degrees (0-90)
+        - 90° = directly overhead (minimum atmosphere)
+        - 30° = 30° above horizon (moderate)
+        - 10° = near horizon (maximum atmosphere)
+    weather : str
+        Weather condition: 'clear', 'cloudy', 'rain'
+
+    Returns
+    -------
+    attenuated_signal : ndarray
+        Signal with atmospheric loss applied
+    loss_db : float
+        Atmospheric loss in dB
+    """
+    # 🎓 WEATHER IMPACT
+    # Different weather = different absorption
+    weather_loss_db = {
+        'clear': 0.5,
+        'cloudy': 1.5,
+        'rain': 4.0
+    }
+    base_loss = weather_loss_db.get(weather, 0.5)
+
+    # 🎓 ELEVATION ANGLE IMPACT
+    # Lower angles = signal passes through more atmosphere
+    # Use cosecant law approximation
+    elevation_angle_deg = np.clip(elevation_angle_deg, 5, 90)  # Avoid division by zero
+
+    # At zenith (90°), path through atmosphere is minimum (factor = 1)
+    # At lower angles, path is longer (factor > 1)
+    elevation_rad = np.radians(elevation_angle_deg)
+    path_length_factor = 1 / np.sin(elevation_rad)
+
+    # 🎓 TOTAL ATMOSPHERIC LOSS
+    # Longer path → more absorption
+    total_loss_db = base_loss * path_length_factor
+
+    # Apply attenuation
+    attenuated_signal = apply_attenuation_db(signal, -total_loss_db)
+
+    return attenuated_signal, total_loss_db
+
+
 # ═══ FUTURE IMPROVEMENTS ═══
 #
 # For Advanced Version (ORBITER-1):
 #   [ ] Add antenna gain calculations
 #   [ ] Include polarization losses
-#   [ ] Add rain fade models
+#   [ ] Add rain fade models (ITU-R P.618)
 #   [ ] Support multiple frequency bands
+#   [ ] Gas absorption (oxygen, water vapor)
+#   [ ] Cloud attenuation models
