@@ -46,7 +46,7 @@ communication session.
 import sys
 sys.path.append('../../src')
 
-from signal.modulation import text_to_bits, bits_to_text, bits_to_bpsk_symbols, bpsk_symbols_to_bits, modulate_bpsk, demodulate_bpsk
+from signals.modulation import text_to_bits, bits_to_text, bits_to_bpsk_symbols, bpsk_symbols_to_bits, modulate_bpsk, demodulate_bpsk
 from channel.noise import add_awgn, calculate_snr_db
 from channel.range_loss import apply_free_space_loss
 from channel.fades import generate_random_fades, apply_fades_to_signal

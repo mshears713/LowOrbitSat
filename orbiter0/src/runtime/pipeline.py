@@ -85,11 +85,11 @@ import sys
 sys.path.append(str(Path(__file__).parent.parent))
 
 # Signal processing
-from signal.modulation import (
+from signals.modulation import (
     text_to_bits, bits_to_bpsk_symbols, modulate_bpsk,
     demodulate_bpsk, bpsk_symbols_to_bits, bits_to_text
 )
-from signal.generator import generate_sine
+from signals.generator import generate_sine
 
 # Channel effects
 from channel.noise import add_awgn, calculate_snr_db

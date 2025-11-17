@@ -63,16 +63,16 @@ print("TEST GROUP 1: Module Imports")
 print("=" * 70)
 
 try:
-    from src.signal.generator import generate_sine
-    test("Import signal.generator", True)
+    from src.signals.generator import generate_sine
+    test("Import signals.generator", True)
 except Exception as e:
-    test("Import signal.generator", False, str(e))
+    test("Import signals.generator", False, str(e))
 
 try:
-    from src.signal.modulation import text_to_bits, bits_to_bpsk_symbols
-    test("Import signal.modulation", True)
+    from src.signals.modulation import text_to_bits, bits_to_bpsk_symbols
+    test("Import signals.modulation", True)
 except Exception as e:
-    test("Import signal.modulation", False, str(e))
+    test("Import signals.modulation", False, str(e))
 
 try:
     from src.channel.noise import add_awgn

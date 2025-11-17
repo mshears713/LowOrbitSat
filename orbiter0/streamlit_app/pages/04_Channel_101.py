@@ -42,7 +42,7 @@ they get weaker and corrupted.
 import sys
 sys.path.append('../../src')
 
-from signal.generator import generate_sine
+from signals.generator import generate_sine
 from channel.range_loss import apply_free_space_loss, distance_to_attenuation_db, apply_atmospheric_loss
 from channel.fades import generate_random_fades, apply_fades_to_signal, FadeEvent
 from channel.noise import add_awgn

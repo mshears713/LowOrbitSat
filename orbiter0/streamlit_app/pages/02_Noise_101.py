@@ -58,7 +58,7 @@ Add noise to a signal and see how SNR affects signal quality!
 import sys
 sys.path.append('../../src')
 
-from signal.generator import generate_sine
+from signals.generator import generate_sine
 from channel.noise import add_awgn, calculate_snr_db
 import matplotlib.pyplot as plt
 import numpy as np
