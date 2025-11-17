@@ -59,6 +59,8 @@ SIMPLIFICATIONS:
 # │                                                        │
 # └────────────────────────────────────────────────────────┘
 
+import numpy as np
+
 
 def text_to_bits(text):
     """
@@ -81,8 +83,22 @@ def text_to_bits(text):
     bits : list of int
         List of 0s and 1s
     """
-    # Implementation coming in Phase 2
-    pass
+    # Convert text to bytes using UTF-8 encoding
+    # 🎓 UTF-8 is the standard text encoding (supports all languages!)
+    text_bytes = text.encode('utf-8')
+
+    # Convert each byte to 8 bits
+    bits = []
+    for byte in text_bytes:
+        # Convert byte to binary string, e.g., 72 → '01001000'
+        # Format: {:08b} means "8 digits, binary, zero-padded"
+        byte_bits = format(byte, '08b')
+
+        # Convert each character '0' or '1' to integer 0 or 1
+        for bit_char in byte_bits:
+            bits.append(int(bit_char))
+
+    return bits
 
 
 def bits_to_text(bits):
@@ -103,8 +119,34 @@ def bits_to_text(bits):
     text : str
         Decoded message
     """
-    # Implementation coming in Phase 2
-    pass
+    # Check that bits length is multiple of 8
+    # 🎓 Each character is 8 bits (1 byte)
+    if len(bits) % 8 != 0:
+        # Pad with zeros if needed (or could raise error)
+        bits = bits + [0] * (8 - len(bits) % 8)
+
+    # Group bits into bytes
+    bytes_list = []
+    for i in range(0, len(bits), 8):
+        # Get 8 bits
+        byte_bits = bits[i:i+8]
+
+        # Convert bit list to string like '01001000'
+        bit_string = ''.join(str(b) for b in byte_bits)
+
+        # Convert binary string to integer
+        byte_value = int(bit_string, 2)
+
+        bytes_list.append(byte_value)
+
+    # Convert bytes to text
+    # 🎓 Handle errors gracefully - replace invalid bytes with �
+    try:
+        text = bytes(bytes_list).decode('utf-8', errors='replace')
+    except Exception:
+        text = "<?>"  # Fallback for corrupted data
+
+    return text
 
 
 def bits_to_bpsk_symbols(bits):
@@ -128,8 +170,16 @@ def bits_to_bpsk_symbols(bits):
     symbols : ndarray
         Array of -1s and +1s
     """
-    # Implementation coming in Phase 2
-    pass
+    # Convert bits to numpy array for vectorized operations
+    bits_array = np.array(bits)
+
+    # BPSK mapping: 0 → -1, 1 → +1
+    # 🎓 Math trick: symbol = 2 * bit - 1
+    #   When bit = 0: 2*0 - 1 = -1
+    #   When bit = 1: 2*1 - 1 = +1
+    symbols = 2 * bits_array - 1
+
+    return symbols
 
 
 def bpsk_symbols_to_bits(symbols):
@@ -156,8 +206,22 @@ def bpsk_symbols_to_bits(symbols):
     bits : list of int
         Decoded bits
     """
-    # Implementation coming in Phase 2
-    pass
+    # Decision rule: Check sign of each symbol
+    # 🎓 Simple threshold detector at zero
+    #   symbol > 0 → bit 1
+    #   symbol ≤ 0 → bit 0
+
+    bits = []
+    for symbol in symbols:
+        if symbol > 0:
+            bits.append(1)
+        else:
+            bits.append(0)
+
+    # Alternative vectorized version (commented out for teaching clarity):
+    # bits = (symbols > 0).astype(int).tolist()
+
+    return bits
 
 
 def modulate_bpsk(symbols, carrier_freq_hz, sample_rate_hz):
@@ -184,9 +248,37 @@ def modulate_bpsk(symbols, carrier_freq_hz, sample_rate_hz):
     -------
     signal : ndarray
         Modulated waveform
+    time_axis : ndarray
+        Time values for the signal
     """
-    # Implementation coming in Phase 2
-    pass
+    # Determine how many samples per symbol
+    # 🎓 More samples = smoother wave, but more data
+    # We'll use at least 10 samples per carrier cycle for smooth visualization
+    samples_per_symbol = max(100, int(sample_rate_hz / carrier_freq_hz) * 10)
+
+    # Calculate total duration
+    num_symbols = len(symbols)
+    duration_sec = num_symbols * samples_per_symbol / sample_rate_hz
+
+    # Create time axis
+    num_samples = num_symbols * samples_per_symbol
+    time_axis = np.linspace(0, duration_sec, num_samples)
+
+    # Create carrier wave
+    # 🎓 Carrier is just a sine wave at the specified frequency
+    angular_freq = 2 * np.pi * carrier_freq_hz
+    carrier = np.sin(angular_freq * time_axis)
+
+    # Upsample symbols to match carrier length
+    # 🎓 Each symbol needs to be repeated for samples_per_symbol samples
+    symbols_upsampled = np.repeat(symbols, samples_per_symbol)
+
+    # Modulate: multiply carrier by symbols
+    # 🎓 Symbol +1 → normal carrier
+    #    Symbol -1 → inverted carrier (180° phase shift)
+    signal = symbols_upsampled * carrier
+
+    return signal, time_axis
 
 
 def demodulate_bpsk(signal, carrier_freq_hz, sample_rate_hz, symbols_count):
@@ -217,8 +309,42 @@ def demodulate_bpsk(signal, carrier_freq_hz, sample_rate_hz, symbols_count):
     symbols : ndarray
         Recovered symbols (may have errors due to noise)
     """
-    # Implementation coming in Phase 2
-    pass
+    # Calculate samples per symbol
+    samples_per_symbol = len(signal) // symbols_count
+    if samples_per_symbol < 1:
+        samples_per_symbol = 1
+
+    # Create carrier for demodulation
+    # 🎓 We need the same carrier to "unmix" the signal
+    time_axis = np.linspace(0, len(signal) / sample_rate_hz, len(signal))
+    angular_freq = 2 * np.pi * carrier_freq_hz
+    carrier = np.sin(angular_freq * time_axis)
+
+    # Demodulate: multiply by carrier
+    # 🎓 This shifts the signal back to baseband
+    demod_signal = signal * carrier
+
+    # Integrate over each symbol period to recover symbols
+    # 🎓 Integration helps reduce noise effects
+    symbols = []
+    for i in range(symbols_count):
+        start_idx = i * samples_per_symbol
+        end_idx = start_idx + samples_per_symbol
+
+        # Sum (integrate) over the symbol period
+        if end_idx <= len(demod_signal):
+            symbol_sum = np.sum(demod_signal[start_idx:end_idx])
+        else:
+            symbol_sum = np.sum(demod_signal[start_idx:])
+
+        # The sign of the sum tells us the symbol
+        # 🎓 Positive sum → +1 symbol, Negative sum → -1 symbol
+        if symbol_sum > 0:
+            symbols.append(1)
+        else:
+            symbols.append(-1)
+
+    return np.array(symbols)
 
 
 # ═══ DEBUGGING NOTES ═══
