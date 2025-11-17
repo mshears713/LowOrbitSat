@@ -1,0 +1,114 @@
+# ═══════════════════════════════════════════════════════════════
+# ORBITER-0 Python Dependencies
+# Teaching-oriented satellite communications simulator
+# ═══════════════════════════════════════════════════════════════
+
+# ───────────────────────────────────────────────────────────────
+# Core Scientific Stack
+# ───────────────────────────────────────────────────────────────
+numpy>=1.24.0
+# Fundamental package for numerical computing
+# Used for: Signal arrays, waveform generation, FFT, math operations
+
+scipy>=1.10.0
+# Scientific computing tools
+# Used for: Signal processing, spectrograms, advanced math
+
+matplotlib>=3.7.0
+# Plotting and visualization
+# Used for: Waveform plots, spectrograms, constellation diagrams
+
+
+# ───────────────────────────────────────────────────────────────
+# Web Interface
+# ───────────────────────────────────────────────────────────────
+streamlit>=1.28.0
+# Interactive web applications
+# Used for: All 10 teaching chapters, live demos, visualization
+
+
+# ───────────────────────────────────────────────────────────────
+# Configuration & Data
+# ───────────────────────────────────────────────────────────────
+pyyaml>=6.0
+# YAML file parser
+# Used for: Reading default_params.yaml configuration
+
+
+# ───────────────────────────────────────────────────────────────
+# Database (Built-in)
+# ───────────────────────────────────────────────────────────────
+# sqlite3 - Included with Python standard library
+# Used for: Mission archive storage (missions.sqlite)
+
+
+# ───────────────────────────────────────────────────────────────
+# Development Tools (Optional)
+# ───────────────────────────────────────────────────────────────
+# Uncomment these for development work
+
+# pytest>=7.4.0
+# Unit testing framework
+# Used for: Phase 5 self-tests and validation
+
+# black>=23.0.0
+# Code formatter
+# Used for: Maintaining consistent code style
+
+# pylint>=2.17.0
+# Code linter
+# Used for: Code quality checks
+
+
+# ───────────────────────────────────────────────────────────────
+# Future Extensions (ORBITER-1 and beyond)
+# ───────────────────────────────────────────────────────────────
+# Uncomment these when implementing advanced features
+
+# reedsolo>=1.7.0
+# Reed-Solomon error correction
+# Used for: Advanced FEC in ORBITER-1
+
+# pyorbital>=1.8.0
+# Orbital mechanics calculations
+# Used for: Real orbital predictions in ORBITER-1
+
+# pyrtlsdr>=0.2.0
+# RTL-SDR interface
+# Used for: Real hardware integration (optional)
+
+
+# ═══════════════════════════════════════════════════════════════
+# Installation Instructions
+# ═══════════════════════════════════════════════════════════════
+#
+# 1. Create virtual environment:
+#    python3 -m venv .venv
+#
+# 2. Activate virtual environment:
+#    Linux/Mac: source .venv/bin/activate
+#    Windows: .venv\Scripts\activate
+#
+# 3. Install dependencies:
+#    pip install --upgrade pip
+#    pip install -r requirements.txt
+#
+# 4. Verify installation:
+#    python -c "import numpy, scipy, matplotlib, streamlit; print('OK')"
+#
+# 5. Run application:
+#    streamlit run orbiter0/streamlit_app/Home.py
+#
+# ═══════════════════════════════════════════════════════════════
+# Version Notes
+# ═══════════════════════════════════════════════════════════════
+#
+# Minimum Python Version: 3.8+
+# Recommended Python Version: 3.10+
+#
+# Tested on:
+# - Python 3.10 on Ubuntu 22.04
+# - Python 3.11 on macOS Ventura
+# - Python 3.10 on Windows 11
+#
+# ═══════════════════════════════════════════════════════════════
